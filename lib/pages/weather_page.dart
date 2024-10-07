@@ -16,20 +16,24 @@ class _WeatherPageState extends State<WeatherPage> {
   Weather? _weather;
 
   _fetchWeather() async {
-    String cityName = await _weatherService.getCurrentCity();
-    print('Fetching weather for: $cityName'); // Log cityName
+  String cityName = await _weatherService.getCurrentCity();
 
-    try {
-      final weather = await _weatherService.getWeather(cityName);
-      print('Weather data: $weather'); // Log weather data
+  // Menghilangkan awalan "Kecamatan " jika ada
+  String formattedCityName = cityName.replaceFirst('Kecamatan ', '').trim();
 
-      setState(() {
-        _weather = weather;
-      });
-    } catch (err) {
-      print('Error: $err'); // Log error
-    }
+  print('Fetching weather for: $formattedCityName'); // Log nama kota yang telah diformat
+
+  try {
+    final weather = await _weatherService.getWeather(formattedCityName);
+    print('Weather data: $weather'); // Log data cuaca
+
+    setState(() {
+      _weather = weather;
+    });
+  } catch (err) {
+    print('Error: $err'); // Log error
   }
+}
 
   String getWeatherAnimation(String? mainCondition) {
     if (mainCondition == null) return 'assets/cerah.json'; //default auto sunny
